@@ -1,0 +1,7 @@
+{
+  "name": "MusicTrackerApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
