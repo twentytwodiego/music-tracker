@@ -1,1 +1,1 @@
-![Mockup](MockupMusicTracker.drawio.png)
+![Mockup](MockupMusikTracker.drawio.png)
