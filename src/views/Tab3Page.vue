@@ -40,22 +40,32 @@
         </ion-select>
       </ion-item>
 
-      <!-- Bewertung -->
+      <!-- Bewertung mit Eingabe -->
       <ion-item lines="none" class="rating-item">
-  <ion-label>Rating:</ion-label>
-  <div class="rating-slider">
-    <ion-range min="1" max="10" step="1" snaps="true" v-model="song.rating" />
-    <div class="rating-value">{{ song.rating }}</div>
-  </div>
-</ion-item>
+        <ion-label>Rating</ion-label>
+        <div class="rating-input-wrapper">
+          <ion-input
+            type="number"
+            step="0.1"
+            min="0"
+            max="10"
+            v-model.number="song.rating"
+            class="rating-input"
+          ></ion-input>
+          <span class="rating-suffix">/10</span>
+        </div>
+      </ion-item>
 
       <!-- MP3 Datei -->
       <ion-item>
-  <ion-label>File</ion-label>
-  <div class="file-input-wrapper">
-    <input type="file" accept="audio/mpeg" @change="handleFileUpload" class="custom-file-input" />
-  </div>
-</ion-item>
+        <ion-label>File</ion-label>
+        <div class="file-input-wrapper">
+          <label class="custom-file-input-label">
+            {{ selectedFileName || 'Choose File' }}
+            <input type="file" accept="audio/mpeg" @change="handleFileUpload" class="custom-file-input" />
+          </label>
+        </div>
+      </ion-item>
 
       <!-- Standortwahl -->
       <ion-item>
@@ -70,16 +80,32 @@
 
       <p v-if="song.coordinates">Standort gespeichert: {{ song.coordinates.lat }}, {{ song.coordinates.lng }}</p>
 
-      <ion-button expand="block" @click="saveSong">Save</ion-button>
+      <ion-button expand="block" @click="saveSong" :disabled="!isFormValid">Save</ion-button>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
+
+import { computed } from 'vue'
+
+const isFormValid = computed(() => {
+  return (
+    song.value.title.trim() &&
+    song.value.artist.trim() &&
+    song.value.link.trim() &&
+    song.value.mood &&
+    song.value.rating &&
+    song.value.coordinates &&
+    song.value.mp3DataUrl
+  )
+})
+
+
 import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
   IonItem, IonLabel, IonSelect, IonSelectOption,
-  IonRange, IonButton
+  IonButton, IonInput
 } from '@ionic/vue'
 import { ref, onMounted, nextTick } from 'vue'
 import L from 'leaflet'
@@ -87,6 +113,8 @@ import L from 'leaflet'
 const showMap = ref(false)
 const mapInstance = ref<any>(null)
 const marker = ref<any>(null)
+
+const selectedFileName = ref('')
 
 const song = ref({
   title: '',
@@ -102,6 +130,7 @@ const song = ref({
 function handleFileUpload(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0]
   if (!file) return
+  selectedFileName.value = file.name
   const reader = new FileReader()
   reader.onload = () => {
     song.value.mp3DataUrl = reader.result as string
@@ -142,11 +171,6 @@ function useCurrentLocation() {
 }
 
 function saveSong() {
-  if (!song.value.coordinates) {
-    alert('Bitte wähle einen Standort auf der Karte oder verwende den aktuellen Standort.')
-    return
-  }
-
   const songs = JSON.parse(localStorage.getItem('songs') || '[]')
   songs.push({ ...song.value, id: Date.now() })
   localStorage.setItem('songs', JSON.stringify(songs))
@@ -162,6 +186,7 @@ function saveSong() {
     coordinates: null,
     mp3DataUrl: ''
   }
+  selectedFileName.value = ''
 
   if (mapInstance.value) {
     mapInstance.value.remove()
@@ -203,68 +228,45 @@ function saveSong() {
   font-size: 12px;
   color: #333;
 }
+
 .file-input-wrapper {
   margin-left: 12px;
   flex: 1;
 }
 
-.file-input-wrapper input[type="file"] {
-  width: 100%;
-  border: none;
-}
-.custom-file-input::-webkit-file-upload-button {
-  visibility: hidden;
-}
-
-.custom-file-input::before {
-  content: 'Choose File';
+.custom-file-input-label {
   display: inline-block;
   background: #3880ff;
   color: white;
   padding: 6px 12px;
-  outline: none;
-  white-space: nowrap;
-  cursor: pointer;
-  font-size: 14px;
   border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.custom-file-input:hover::before {
-  background-color: #3171e0;
-}
-
-.custom-file-input:active::before {
-  background-color: #2c60c4;
-}
-
-.custom-file-input::-ms-value {
+.custom-file-input {
   display: none;
 }
 
-.custom-file-input::-moz-focus-inner {
-  border: 0;
-}
 .rating-item {
   display: flex;
   align-items: center;
-  --inner-padding-end: 0;
+  justify-content: space-between;
 }
 
-.rating-slider {
+.rating-input-wrapper {
   display: flex;
   align-items: center;
-  gap: 10px;
-  flex: 1;
 }
 
-.rating-slider ion-range {
-  flex: 1.5;
-  margin-inline-start: 10px;
-}
-
-.rating-value {
-  width: 24px;
+.rating-input {
+  width: 70px;
   text-align: right;
+}
+
+.rating-suffix {
+  margin-left: 4px;
   font-weight: bold;
+  color: #555;
 }
 </style>
