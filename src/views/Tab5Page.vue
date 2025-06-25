@@ -14,7 +14,7 @@
           <ion-thumbnail slot="start">
             <img :src="song.link" alt="cover" />
           </ion-thumbnail>
-          <ion-label>
+          <ion-label class="text-black">
             <h2>{{ song.title }}</h2>
             <p>{{ song.artist }}</p>
           </ion-label>
@@ -29,7 +29,7 @@ import {
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent,
   IonSearchbar, IonList, IonItem, IonLabel, IonThumbnail
 } from '@ionic/vue'
-import { ref, computed, watchEffect } from 'vue'
+import { ref, computed } from 'vue'
 
 interface Song {
   id: number
@@ -45,8 +45,6 @@ interface Song {
 
 const query = ref('')
 const allSongs = ref<Song[]>([])
-
-// Neue Songs bei jeder Änderung der Suche laden
 
 import { onIonViewWillEnter } from '@ionic/vue'
 
@@ -77,5 +75,9 @@ ion-thumbnail img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.text-black {
+  color: black;
 }
 </style>

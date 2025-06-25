@@ -35,17 +35,17 @@
       <ion-modal :is-open="isEditOpen" @didDismiss="closeEdit">
         <ion-header>
           <ion-toolbar>
-            <ion-title>Bearbeiten</ion-title>
+            <ion-title>Edit</ion-title>
             <ion-buttons slot="end">
-              <ion-button @click="closeEdit">Schliessen</ion-button>
+              <ion-button @click="closeEdit">Close</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
 
         <ion-content class="ion-padding">
           <ion-item>
-            <ion-label position="stacked">Titel</ion-label>
-            <ion-input v-model="editSong.title" placeholder="Titel"></ion-input>
+            <ion-label position="stacked">Title</ion-label>
+            <ion-input v-model="editSong.title" placeholder="Title"></ion-input>
           </ion-item>
 
           <ion-item>
@@ -54,7 +54,7 @@
           </ion-item>
 
           <ion-item>
-            <ion-label position="stacked">Link zum Cover</ion-label>
+            <ion-label position="stacked">Link to coverart</ion-label>
             <ion-input v-model="editSong.link" placeholder="Link"></ion-input>
           </ion-item>
 
@@ -64,13 +64,9 @@
               <ion-select-option value="happy">Happy</ion-select-option>
               <ion-select-option value="sad">Sad</ion-select-option>
               <ion-select-option value="chill">Chill</ion-select-option>
-              <ion-select-option value="energetic">Energetic</ion-select-option>
-              <ion-select-option value="romantic">Romantic</ion-select-option>
-              <ion-select-option value="nostalgic">Nostalgic</ion-select-option>
               <ion-select-option value="angry">Angry</ion-select-option>
+              <ion-select-option value="romantic">Romantic</ion-select-option>
               <ion-select-option value="motivated">Motivated</ion-select-option>
-              <ion-select-option value="lonely">Lonely</ion-select-option>
-              <ion-select-option value="melancholic">Melancholic</ion-select-option>
             </ion-select>
           </ion-item>
 
@@ -86,7 +82,7 @@
             ></ion-input>
           </ion-item>
 
-          <ion-button expand="block" @click="saveEditedSong">Speichern</ion-button>
+          <ion-button expand="block" @click="saveEditedSong">Save</ion-button>
         </ion-content>
       </ion-modal>
     </ion-content>
@@ -144,18 +140,18 @@ function enforceRatingLimits() {
 
 async function editOrDelete(song: any) {
   const alert = await alertController.create({
-    header: 'Aktion wählen',
+    header: 'What do you want to do?',
     buttons: [
       {
-        text: 'Löschen',
+        text: 'Delete',
         role: 'destructive',
         handler: async () => {
           const confirm = await alertController.create({
-            header: 'Bist du sicher?',
-            message: 'Willst du diesen Song wirklich löschen?',
+            header: 'Are you sure?',
+            message: 'Do you really want to delete this song?',
             buttons: [
               {
-                text: 'Ja, löschen',
+                text: 'Yes, Delete',
                 role: 'destructive',
                 handler: () => {
                   allSongs.value = allSongs.value.filter(s => s.id !== song.id)
@@ -163,7 +159,7 @@ async function editOrDelete(song: any) {
                 }
               },
               {
-                text: 'Abbrechen',
+                text: 'Cancel',
                 role: 'cancel'
               }
             ]
@@ -172,14 +168,14 @@ async function editOrDelete(song: any) {
         }
       },
       {
-        text: 'Bearbeiten',
+        text: 'Edit',
         handler: () => {
           editSong.value = { ...song }
           isEditOpen.value = true
         }
       },
       {
-        text: 'Abbrechen',
+        text: 'Cancel',
         role: 'cancel'
       }
     ]

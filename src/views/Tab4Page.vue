@@ -9,10 +9,14 @@
     <ion-content class="ion-padding">
       <ion-list>
         <div v-for="mood in moods" :key="mood.value">
-          <ion-item button @click="toggleMood(mood.value)">
+          <ion-item button @click="toggleMood(mood.value)" :detail="false">
             <ion-label>
-              <h2>{{ mood.emoji }} {{ mood.label }} Playlist</h2>
+              <h2>{{ mood.label }}</h2>
             </ion-label>
+            <ion-icon
+              :icon="expandedMood === mood.value ? chevronDownOutline : chevronForwardOutline"
+              slot="end"
+            />
           </ion-item>
 
           <ion-list v-show="expandedMood === mood.value">
@@ -32,21 +36,19 @@
 <script setup lang="ts">
 import {
   IonPage, IonHeader, IonToolbar, IonTitle,
-  IonContent, IonList, IonItem, IonLabel
+  IonContent, IonList, IonItem, IonLabel, IonIcon
 } from '@ionic/vue'
+
 import { ref } from 'vue'
+import { chevronForwardOutline, chevronDownOutline } from 'ionicons/icons'
 
 const moods = [
-  { value: 'happy', label: 'Happy', emoji: '😊' },
-  { value: 'sad', label: 'Sad', emoji: '😢' },
-  { value: 'chill', label: 'Chill', emoji: '😎' },
-  { value: 'energetic', label: 'Energetic', emoji: '⚡' },
-  { value: 'romantic', label: 'Romantic', emoji: '❤️' },
-  { value: 'nostalgic', label: 'Nostalgic', emoji: '📻' },
-  { value: 'angry', label: 'Angry', emoji: '😠' },
-  { value: 'motivated', label: 'Motivated', emoji: '🔥' },
-  { value: 'lonely', label: 'Lonely', emoji: '🥺' },
-  { value: 'melancholic', label: 'Melancholic', emoji: '🌧️' }
+  { value: 'happy', label: 'Happy' },
+  { value: 'sad', label: 'Sad' },
+  { value: 'chill', label: 'Chill' },
+  { value: 'angry', label: 'Angry' },
+  { value: 'romantic', label: 'Romantic' },
+  { value: 'motivated', label: 'Motivated' },
 ]
 
 const expandedMood = ref('')
@@ -57,7 +59,12 @@ function toggleMood(mood: string) {
 }
 
 function getSongsByMood(mood: string) {
-  return allSongs.value.filter((song:any) => song.mood === mood && song.title && song.artist && song.link)
+  return allSongs.value.filter((song: any) =>
+    song.mood === mood &&
+    song.title &&
+    song.artist &&
+    song.link
+  )
 }
 </script>
 
@@ -66,18 +73,25 @@ ion-item {
   --background: #f4f4f4;
   margin-bottom: 8px;
   border-radius: 8px;
+  color: black;
 }
+
+ion-item h2,
+ion-item h3,
+ion-item p {
+  color: black;
+  margin: 0;
+}
+
 ion-item h2 {
   font-size: 18px;
-  margin: 0;
 }
+
 ion-item h3 {
-  margin: 0;
   font-weight: 500;
 }
+
 ion-item p {
-  margin: 0;
   font-size: 14px;
-  color: #666;
 }
 </style>
