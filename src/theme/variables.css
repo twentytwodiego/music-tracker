@@ -81,7 +81,6 @@ ion-tab-bar {
   bottom: 1.2rem;
 }
 
-/* Icon Styling */
 .tab-icon {
   color: white;
   font-size: 1.3rem;
@@ -91,7 +90,7 @@ ion-tab-bar {
   transition: all 0.2s ease;
 }
 
-/* Aktiver Tab mit Glow */
+/* Glow */
 ion-tab-button.tab-selected .tab-icon {
   color: #857d71;
   filter: drop-shadow(0 0 6px #e6dccd);
