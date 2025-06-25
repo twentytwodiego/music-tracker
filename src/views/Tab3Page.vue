@@ -22,17 +22,28 @@
         <label for="linkInput">Link to coverart</label>
       </div>
 
+      <div class="floating-input">
+        <input
+          id="ratingInput"
+          type="number"
+          step="0.1"
+          min="1"
+          max="10"
+          v-model.number="song.rating"
+          placeholder=" "
+        />
+        <label for="ratingInput">Rating (1–10)</label>
+      </div>
+
       <ion-item>
         <ion-label>Mood</ion-label>
         <ion-select v-model="song.mood" placeholder="Select mood">
           <ion-select-option value="happy">Happy</ion-select-option>
           <ion-select-option value="sad">Sad</ion-select-option>
           <ion-select-option value="chill">Chill</ion-select-option>
-          <ion-select-option value="angry"> Angry</ion-select-option>
-          <ion-select-option value="romantic"> Romantic</ion-select-option>
-          <ion-select-option value="motivated"> Motivated</ion-select-option>
-          
-          
+          <ion-select-option value="angry">Angry</ion-select-option>
+          <ion-select-option value="romantic">Romantic</ion-select-option>
+          <ion-select-option value="motivated">Motivated</ion-select-option>
         </ion-select>
       </ion-item>
 
@@ -69,6 +80,7 @@ const song = ref({
   link: '',
   mood: '',
   coordinates: null as null | { lat: number; lng: number },
+  rating: null as number | null
 })
 
 const showMap = ref(false)
@@ -76,7 +88,14 @@ let map: any = null
 let marker: any = null
 
 const isFormValid = computed(() =>
-  song.value.title && song.value.artist && song.value.link && song.value.mood && song.value.coordinates
+  song.value.title &&
+  song.value.artist &&
+  song.value.link &&
+  song.value.mood &&
+  song.value.coordinates &&
+  typeof song.value.rating === 'number' &&
+  song.value.rating >= 1 &&
+  song.value.rating <= 10
 )
 
 function loadMap() {
@@ -85,6 +104,7 @@ function loadMap() {
   nextTick(() => {
     setTimeout(() => {
       const mapElement = document.getElementById('map3')
+      if (!mapElement) return
 
       if (map) {
         map.remove()
@@ -113,9 +133,6 @@ function loadMap() {
     }, 200)
   })
 }
-
-
-
 
 function useCurrentLocation() {
   navigator.geolocation.getCurrentPosition(
@@ -150,7 +167,8 @@ function resetForm() {
     artist: '',
     link: '',
     mood: '',
-    coordinates: null
+    coordinates: null,
+    rating: null
   }
 }
 </script>
