@@ -108,7 +108,7 @@ const filteredAndSortedSongs = computed(() => {
 
   switch (selectedSort.value) {
     case 'oldest':
-      return [...validSongs].sort((a, b) => new Date(a.addedDate).getTime() - new Date(b.addedDate).getTime())
+      return [...validSongs].sort((a, b) => a.id - b.id)
     case 'az':
       return [...validSongs].sort((a, b) => a.title?.localeCompare(b.title || '') || 0)
     case 'rating-high':
@@ -116,7 +116,7 @@ const filteredAndSortedSongs = computed(() => {
     case 'rating-low':
       return [...validSongs].sort((a, b) => (a.rating || 0) - (b.rating || 0))
     default:
-      return [...validSongs].sort((a, b) => new Date(b.addedDate).getTime() - new Date(a.addedDate).getTime())
+      return [...validSongs].sort((a, b) => b.id - a.id)
   }
 })
 

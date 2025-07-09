@@ -82,7 +82,7 @@ ion-tab-bar {
 }
 
 .tab-icon {
-  color: white;
+  color: rgb(233, 233, 233);
   font-size: 1.3rem;
   background: none !important;
   padding: 0.5rem;

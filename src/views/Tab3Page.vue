@@ -186,14 +186,14 @@ function resetForm() {
   border-bottom: 1px solid #ccc;
   background: transparent;
   outline: none;
-  color: white;
+  color: rgb(0, 0, 0);
 }
 .floating-input label {
   position: absolute;
   left: 5px;
   top: 12px;
   font-size: 14px;
-  color: #999;
+  color: #333232;
   pointer-events: none;
   transition: all 0.2s ease;
 }
@@ -201,7 +201,7 @@ function resetForm() {
 .floating-input input:not(:placeholder-shown) + label {
   top: -8px;
   font-size: 12px;
-  color: #ddd;
+  color: #333232;
 }
 .map-container {
   height: 300px;
